@@ -2,7 +2,7 @@ var marked = require('marked');
 var Comment = require('../lib/mongo').Comment;
 
 //将comment的content从markdown转换成HTML
-Post.plugin('contentToHtml',{
+Comment.plugin('contentToHtml',{
     afterFind: function(commemts){
         return commemts.map(function(comment){
             comment.content = marked(comment.content);
