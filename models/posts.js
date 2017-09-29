@@ -32,7 +32,7 @@ module.exports = {
     //按创建时间降序获取所有用户文章或某个特定用户的所有文章
     getPosts: function getPosts(author) {
         var query = {};
-        if (author) {
+        if(author){
             query.author = author;
         }
         return Post
@@ -42,10 +42,25 @@ module.exports = {
             .addCreatedAt()
             .contentToHtml()
             .exec();
-  },
+    },
 
     //通过文章id给pv+1
     incPv : function incPv(postId){
         return Post.update({_id:postId},{$inc:{pv:1}}).exec();
+    },
+
+    //通过id获取一篇原生文章（编辑）
+    getRowPostById : function getRowPostById(postId){
+        return Post.findOne({_id : postId}).populate({path: 'author',model: 'User'}).exec();
+    },
+
+    //通过用户id和文章id更新一篇文章
+    updatePostById : function updatePostById(postId,author,data){
+        return Post.update({ author: author, _id: postId }, { $set: data }).exec();
+    },
+
+    //通过用户id和文章id删除一篇文章
+    delPostById : function delPostById(postId,author){
+        return Post.remove({author: author, _id: postId}).exec();
     }
 };
